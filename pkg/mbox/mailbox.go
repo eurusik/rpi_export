@@ -262,7 +262,8 @@ func (m *Mailbox) GetFirmwareRevision() (uint32, error) {
 
 // GetBoardModel returns the model number of the system board.
 func (m *Mailbox) GetBoardModel() (uint32, error) {
-	return m.getUint32(TagGetBoardModel)
+	//return m.getUint32(TagGetBoardModel)
+	return 0, nil
 }
 
 // GetBoardRevision returns the revision number of the system board.
