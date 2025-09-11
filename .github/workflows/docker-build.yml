@@ -29,7 +29,7 @@ jobs:
 
     - name: Build Go binary for ARM
       run: |
-        GOOS=linux GOARCH=arm GOARM=7 go build -o rpi_exporter ./...
+        GOOS=linux GOARCH=arm GOARM=7 go build -o rpi_exporter .
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3

@@ -11,7 +11,7 @@ RUN go mod download
 
 COPY . .
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH GOARM=${TARGETVARIANT#v} \
-    go build -ldflags='-w -s' -o rpi_exporter ./...
+    go build -ldflags='-w -s' -o rpi_exporter .
 
 # Final stage
 FROM scratch

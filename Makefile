@@ -5,7 +5,7 @@ rpi_exporter:
 	GOOS=linux \
 	GOARCH=arm \
 	GOARM=7 \
-	go build -o . ./...
+	go build -o rpi_exporter .
 
 install: rpi_exporter
 	install \
