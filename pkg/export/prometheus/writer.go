@@ -184,18 +184,22 @@ func (w *expWriter) write() error {
     }
     w.writeSample(formatBool(turbo))
 
-    w.writeHeader("rpi_under_voltage", "Under-voltage detected.", metricTypeGauge)
     throttledBits, err := m.GetThrottled()
     if err != nil {
         return err
     }
-    w.writeSample(formatBool((throttledBits & (1 << 0)) != 0))
-
-    w.writeHeader("rpi_freq_capped", "ARM frequency capped.", metricTypeGauge)
-    w.writeSample(formatBool((throttledBits & (1 << 1)) != 0))
-
-    w.writeHeader("rpi_throttled", "CPU throttled.", metricTypeGauge)
-    w.writeSample(formatBool((throttledBits & (1 << 2)) != 0))
+    w.writeHeader(
+        "rpi_power_state",
+        "Component power state (0: off, 1: on, 2: missing).",
+        metricTypeGauge,
+        "id",
+    )
+    w.writeSample(formatBool((throttledBits & (1 << 0)) != 0), "under_voltage")
+    w.writeSample(formatBool((throttledBits & (1 << 1)) != 0), "freq_capped")
+    w.writeSample(formatBool((throttledBits & (1 << 2)) != 0), "throttled")
+    w.writeSample(formatBool((throttledBits & (1 << 16)) != 0), "under_voltage_occurred")
+    w.writeSample(formatBool((throttledBits & (1 << 17)) != 0), "freq_capped_occurred")
+    w.writeSample(formatBool((throttledBits & (1 << 18)) != 0), "throttled_occurred")
 
 	/*
 	 * Temperature sensors.
