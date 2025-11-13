@@ -177,12 +177,25 @@ func (w *expWriter) write() error {
 		w.writeSample(clockRate, label)
 	}
 
-	w.writeHeader("rpi_turbo", "Turbo state.", metricTypeGauge)
-	turbo, err := m.GetTurbo()
-	if err != nil {
-		return err
-	}
-	w.writeSample(formatBool(turbo))
+    w.writeHeader("rpi_turbo", "Turbo state.", metricTypeGauge)
+    turbo, err := m.GetTurbo()
+    if err != nil {
+        return err
+    }
+    w.writeSample(formatBool(turbo))
+
+    w.writeHeader("rpi_under_voltage", "Under-voltage detected.", metricTypeGauge)
+    throttledBits, err := m.GetThrottled()
+    if err != nil {
+        return err
+    }
+    w.writeSample(formatBool((throttledBits & (1 << 0)) != 0))
+
+    w.writeHeader("rpi_freq_capped", "ARM frequency capped.", metricTypeGauge)
+    w.writeSample(formatBool((throttledBits & (1 << 1)) != 0))
+
+    w.writeHeader("rpi_throttled", "CPU throttled.", metricTypeGauge)
+    w.writeSample(formatBool((throttledBits & (1 << 2)) != 0))
 
 	/*
 	 * Temperature sensors.

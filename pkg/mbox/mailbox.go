@@ -23,19 +23,20 @@ const (
 )
 
 const (
-	TagGetFirmwareRevision  uint32 = 0x00000001
-	TagGetBoardModel        uint32 = 0x00010001
-	TagGetBoardRevision     uint32 = 0x00010002
-	TagGetBoardMAC          uint32 = 0x00010003
-	TagGetPowerState        uint32 = 0x00020001
-	TagGetClockRate         uint32 = 0x00030002
-	TagGetVoltage           uint32 = 0x00030003
-	TagGetMaxVoltage        uint32 = 0x00030005
-	TagGetTemperature       uint32 = 0x00030006
-	TagGetMinVoltage        uint32 = 0x00030008
-	TagGetTurbo             uint32 = 0x00030009
-	TagGetMaxTemperature    uint32 = 0x0003000A
-	TagGetClockRateMeasured uint32 = 0x00030047
+    TagGetFirmwareRevision  uint32 = 0x00000001
+    TagGetBoardModel        uint32 = 0x00010001
+    TagGetBoardRevision     uint32 = 0x00010002
+    TagGetBoardMAC          uint32 = 0x00010003
+    TagGetPowerState        uint32 = 0x00020001
+    TagGetClockRate         uint32 = 0x00030002
+    TagGetVoltage           uint32 = 0x00030003
+    TagGetMaxVoltage        uint32 = 0x00030005
+    TagGetTemperature       uint32 = 0x00030006
+    TagGetMinVoltage        uint32 = 0x00030008
+    TagGetTurbo             uint32 = 0x00030009
+    TagGetMaxTemperature    uint32 = 0x0003000A
+    TagGetThrottled         uint32 = 0x00030046
+    TagGetClockRateMeasured uint32 = 0x00030047
 )
 
 const (
@@ -392,10 +393,14 @@ func (m *Mailbox) GetMaxVoltage(id VoltageID) (float32, error) {
 }
 
 func (m *Mailbox) GetTurbo() (bool, error) {
-	tags, err := m.Do(TagGetTurbo, 8, 0)
-	if err != nil {
-		return false, err
-	}
-	return tags[0].Value()[1] == 1, nil
+    tags, err := m.Do(TagGetTurbo, 8, 0)
+    if err != nil {
+        return false, err
+    }
+    return tags[0].Value()[1] == 1, nil
 
+}
+
+func (m *Mailbox) GetThrottled() (uint32, error) {
+    return m.getUint32(TagGetThrottled)
 }
